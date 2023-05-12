@@ -1,0 +1,21 @@
+dialog{
+    transition-duration: 0.5s;
+    height: fit-content;
+    border: none;
+}
+dialog:focus{
+    outline: none;
+}
+dialog::backdrop{
+    background-color: transparent;
+}
+.go-back:hover{
+    cursor: pointer;
+}
+.modal{
+    opacity: 0;
+    transition-duration: 0.5s;
+}
+.show{
+    opacity: 1;
+}
