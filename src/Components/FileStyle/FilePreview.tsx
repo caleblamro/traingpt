@@ -1,8 +1,9 @@
 import { DeleteTwoTone, FileExcelTwoTone, FileImageTwoTone, FileMarkdownTwoTone, FilePdfTwoTone, FilePptTwoTone, FileTextTwoTone, FileUnknownTwoTone, FileWordTwoTone, Html5TwoTone } from "@ant-design/icons";
 import "./FileStyle.css";
 import { useEffect } from "react";
-export default function FilePreview(props){
-    const theme = props.theme;
+import { useTheme } from "../../RootController";
+export default function FilePreview(props: { fileName: string; index: number; backgroundColor: string | undefined; color: string | undefined; removeFile: (arg0: number) => void; }){
+    const theme = useTheme();
     const index = props.fileName.indexOf('.');
     const extension = props.fileName.substring(index + 1);
     const icons = {
@@ -19,10 +20,17 @@ export default function FilePreview(props){
         "html": <Html5TwoTone />,
         default: <FileUnknownTwoTone />
     }
+    type FileIcon = typeof icons;
+    function getIcon(obj: FileIcon, key: string) {
+        const icon = obj[key as keyof FileIcon];
+        if(!icon) return obj.default;
+        return icon;
+    }
+
     useEffect(() => {
         //give time for components to render
         setTimeout(() => {
-            const file = document.getElementById(`file-preview${props.index}`);
+            const file = document.getElementById(`file-preview${props.index}`) as HTMLDivElement;
             file.classList.add("open");
             setTimeout(() => {
                 file.classList.add("show");
@@ -31,7 +39,7 @@ export default function FilePreview(props){
     }, [])
     return(
         <div id={`file-preview${props.index}`} style={{backgroundColor: props.backgroundColor, color: props.color}} className="file-preview">
-            <div className="file-preview-icon">{icons[extension] || icons.default}</div>
+            <div className="file-preview-icon">{getIcon(icons, extension)}</div>
             <div className="text small file-name">{props.fileName.trim()}</div>
             <div onClick={() => props.removeFile(props.index)} className="file-preview-icon"><DeleteTwoTone twoToneColor={theme.palette.alert.error} /></div>
         </div>

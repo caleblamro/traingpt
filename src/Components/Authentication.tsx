@@ -1,36 +1,37 @@
-import { createClient } from '@supabase/supabase-js';
+import { Session, createClient } from '@supabase/supabase-js';
 import { Auth } from '@supabase/auth-ui-react';
 import { tokens } from '../Theme';
 import "./Authentication.css";
 import { useEffect, useState } from 'react';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { Link, useNavigate } from 'react-router-dom';
-import { LeftOutlined } from '@ant-design/icons';
+import { ControlOutlined, LeftOutlined } from '@ant-design/icons';
 import supabase from '../Global/Supabase';
+import { useTheme } from '../RootController';
 
 
-export default function Authentication(props) {
-    const theme = props.theme;
+export default function Authentication(props: { setShowNav: (arg0: boolean) => void; setSession: (arg0: Session | {} | null) => void; setFullPageLoad: (arg0: boolean) => void }) {
+    const theme = useTheme();
     const navigate = useNavigate();
-
     useEffect(() => {
-        props.setFullPageLoad(true);
         supabase.auth.getSession().then(({ data }) => {
             if(data) {
                 props.setShowNav(true);
-                props.setSession(data.user);
+                props.setSession(data);
                 navigate("/app");
+            }else{
+                console.error("Could not get session");
             }
+        }).catch((error) => {
+            console.error("Could not get session", error);
         })
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
             props.setSession(session);
         })
-        props.setFullPageLoad(false);
         return () => subscription.unsubscribe();
     }, []);
-
     return(
         <div style={{backgroundColor: theme.palette.background.default}} className="auth-container">
             <Link to="/"><div style={{backgroundColor: theme.palette.background.paper}} className="go-back"><LeftOutlined className="card-icon" style={{color: theme.palette.text.special}}/></div></Link>

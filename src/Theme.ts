@@ -1,7 +1,53 @@
-export const tokens = mode => ({
+export enum ThemeMode {
+    LIGHT = 'light',
+    DARK = 'dark'
+};
+export type Palette = {
+    mode: ThemeMode;
+    background: {
+      default: string;
+      paper: string;
+      special: string;
+    };
+    text: {
+      primary: string;
+      secondary: string;
+      special: string;
+    };
+    primary: {
+      main: string;
+      contrastText: string;
+    };
+    secondary: {
+      main: string;
+      contrastText: string;
+    };
+    tertiary: {
+      main: string;
+      contrastText: string;
+    };
+    alert: {
+      success: string;
+      warning: string;
+      error: string;
+      info: string;
+      special: string;
+      highlight: string;
+    };
+    file: {
+      ppt: string;
+      word?: string; // word color is optional
+    };
+};
+
+export type Theme = {
+    palette: Palette
+}
+
+export const tokens = (mode:ThemeMode) => ({
     palette: {
         mode,
-        ...(mode === "light")
+        ...(mode === ThemeMode.LIGHT)
         //light mode
         ? {
             background: {
@@ -11,6 +57,7 @@ export const tokens = mode => ({
             },
             text: {
                 primary: "#191c1e",
+                secondary: "#e1e2e5",
                 special: "#001f2a",
             },
             primary: {
@@ -46,6 +93,7 @@ export const tokens = mode => ({
             },
             text: {
                 primary: "#e1e2e5",
+                secondary: "#191c1e",
                 special: "#bfe9ff",
             },
             primary: {
@@ -73,5 +121,5 @@ export const tokens = mode => ({
                 word: "#185abd",
             }
         }
-    }
+    } as Palette
 });

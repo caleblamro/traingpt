@@ -1,15 +1,14 @@
 import { CloseOutlined } from "@ant-design/icons";
 import "./Modal.css";
-import { useEffect, useState } from "react";
+import { CSSProperties, ElementType, JSXElementConstructor, ReactElement, ReactFragment, ReactPortal, useEffect, useState } from "react";
+import { useTheme } from "../../RootController";
 
-export default function Modal(props){
+export default function Modal(props: { id: string | undefined; show: Boolean; style: CSSProperties | undefined; title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; children: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; }){
     const [count, setCount] = useState(0);
-    const theme = props.theme;
-    const supabase = props.supabase;
-    const session = props.session;
+    const theme = useTheme();
 
     const toggleModal = () => {
-        const modal = document.querySelector(`#${props.id}`);
+        const modal = document.querySelector(`#${props.id}`) as HTMLDialogElement;
         if (!modal.hasAttribute('open')) {
             modal.showModal();
             setTimeout(() => {
